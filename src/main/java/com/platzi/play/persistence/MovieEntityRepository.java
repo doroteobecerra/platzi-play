@@ -1,12 +1,14 @@
 package com.platzi.play.persistence;
 
 import com.platzi.play.domain.dto.MovieDTO;
+import com.platzi.play.domain.dto.UpdateMovieDTO;
 import com.platzi.play.domain.repository.MovieRepository;
 import com.platzi.play.persistence.crud.CrudMovieEntity;
 import com.platzi.play.persistence.entity.MovieEntity;
 import com.platzi.play.persistence.mapper.MovieMapper;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -28,5 +30,28 @@ public class MovieEntityRepository implements MovieRepository {
     public MovieDTO getById(long id) {
         MovieEntity movieEntity = this.crudMovieEntity.findById(id).orElse(null);
         return this.movieMapper.toDto(movieEntity);
+    }
+
+    @Override
+    public MovieDTO save(MovieDTO movieDTO) {
+        MovieEntity movieEntity = this.movieMapper.toEntity(movieDTO);
+        return this.movieMapper.toDto(this.crudMovieEntity.save(movieEntity));
+    }
+
+    @Override
+    public MovieDTO update(long id, UpdateMovieDTO updateMovieDTO) {
+        MovieEntity movieEntity = this.crudMovieEntity.findById(id).orElse(null);
+
+        if(movieEntity == null){
+            return null;
+        }
+
+        movieEntity.setTitulo(updateMovieDTO.title());
+        movieEntity.setFechaEstreno(updateMovieDTO.releaseData());
+        movieEntity.setClasificacion(BigDecimal.valueOf(updateMovieDTO.rating()));
+
+        this.movieMapper.updateEntityFromDto(updateMovieDTO, movieEntity);
+
+        return this.movieMapper.toDto(this.crudMovieEntity.save(movieEntity));
     }
 }

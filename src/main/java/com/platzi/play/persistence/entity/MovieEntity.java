@@ -25,7 +25,6 @@ public class MovieEntity {
     private LocalDate fechaEstreno;
     @Column(precision = 3, scale = 2)
     private BigDecimal clasificacion;
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false, length = 10)
     private String estado;
-
 }
