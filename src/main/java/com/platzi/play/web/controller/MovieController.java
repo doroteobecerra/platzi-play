@@ -1,8 +1,10 @@
 package com.platzi.play.web.controller;
 
 import com.platzi.play.domain.dto.MovieDTO;
+import com.platzi.play.domain.dto.SuggestRequestDTO;
 import com.platzi.play.domain.dto.UpdateMovieDTO;
 import com.platzi.play.domain.services.MovieServices;
+import com.platzi.play.domain.services.PlatziPlayAiServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,11 @@ import java.util.List;
 public class MovieController {
 
     private final MovieServices movieServices;
+    private final PlatziPlayAiServices aiServices;
 
-    public MovieController(MovieServices movieServices) {
+    public MovieController(MovieServices movieServices, PlatziPlayAiServices aiServices) {
         this.movieServices = movieServices;
+        this.aiServices = aiServices;
     }
 
     @GetMapping()
@@ -31,6 +35,12 @@ public class MovieController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(movieDTO);
+    }
+
+    @PostMapping("/suggest")
+    public ResponseEntity<String> generateMovieSuggestion(@RequestBody SuggestRequestDTO suggestRequestDTO) {
+        return ResponseEntity.ok(this.aiServices.generateMoviesSuggestion(suggestRequestDTO.userPreferences()));
+
     }
 
     @PostMapping
