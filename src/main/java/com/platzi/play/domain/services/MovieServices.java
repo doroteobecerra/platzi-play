@@ -30,4 +30,8 @@ public class MovieServices {
     public MovieDTO update(long id, UpdateMovieDTO updateMovieDTO){
         return this.movieRepository.update(id, updateMovieDTO);
     }
+
+    public void delete(long id){
+        this.movieRepository.delete(id);
+    }
 }

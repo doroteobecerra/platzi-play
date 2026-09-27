@@ -54,4 +54,12 @@ public class MovieEntityRepository implements MovieRepository {
 
         return this.movieMapper.toDto(this.crudMovieEntity.save(movieEntity));
     }
+
+    @Override
+    public void delete(long id) {
+        if (!this.crudMovieEntity.existsById(id)) {
+            throw new RuntimeException("La película no existe");
+        }
+        this.crudMovieEntity.deleteById(id);
+    }
 }
