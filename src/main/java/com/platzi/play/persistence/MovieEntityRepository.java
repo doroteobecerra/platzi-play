@@ -49,10 +49,6 @@ public class MovieEntityRepository implements MovieRepository {
         if(movieEntity == null){
             return null;
         }
-        if(this.crudMovieEntity.findFirstByTitulo(updateMovieDTO.title()) != null){
-            throw new MovieAlredyExistsException(updateMovieDTO.title());
-        }
-
 
         movieEntity.setTitulo(updateMovieDTO.title());
         movieEntity.setFechaEstreno(updateMovieDTO.releaseData());
