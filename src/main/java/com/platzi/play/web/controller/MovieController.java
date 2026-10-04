@@ -5,6 +5,10 @@ import com.platzi.play.domain.dto.SuggestRequestDTO;
 import com.platzi.play.domain.dto.UpdateMovieDTO;
 import com.platzi.play.domain.services.MovieServices;
 import com.platzi.play.domain.services.PlatziPlayAiServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +34,15 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDTO> getById(@PathVariable long id){
+    @Operation(
+            summary = "Obtener una película por su id",
+            description = "Obtiene y muestra la película solicitada",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Película encontrada"),
+                    @ApiResponse(responseCode = "400", description = "Película no encontrada", content = @Content)
+            }
+    )
+    public ResponseEntity<MovieDTO> getById(@Parameter(description = "Identificador de la película a recuperar", example = "9") @PathVariable long id){
         MovieDTO movieDTO = this.movieServices.getById(id);
         if(movieDTO == null) {
             return ResponseEntity.notFound().build();
